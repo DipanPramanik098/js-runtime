@@ -1,47 +1,33 @@
 # JS Runtime
 
-A lightweight JavaScript runtime built in Python using the Google V8 JavaScript engine via PyMiniRacer.
+A lightweight JavaScript runtime built in Python using the Google V8 JavaScript Engine through PyMiniRacer.
 
----
-
-## Overview
-
-This project executes JavaScript code from `.js` files and prints the output to the terminal.
-
-The runtime:
-
-- Reads JavaScript source code from a file
-- Executes it using Google's V8 Engine
-- Captures `console.log()` output
-- Prints results to standard output
+This project executes JavaScript code from `.js` files, captures console output, and prints the results to the terminal. It demonstrates how a non-JavaScript language can be used to run JavaScript programs while providing a simple and extensible runtime architecture.
 
 ---
 
 ## Features
 
-### JavaScript Support
+### JavaScript Execution
 
-- Variable declarations (`let`, `const`)
-- Numbers, strings, booleans
-- Arithmetic operators
-- Comparison operators
-- Logical operators
-- Conditional statements (`if`, `else if`, `else`)
-- Loops (`for`, `while`)
-- Functions
-- Arrays
-- Objects
-- String operations
-- Math operations
-- Modern JavaScript syntax supported by V8
+* Execute JavaScript files directly from the command line
+* Support for modern JavaScript syntax through Google's V8 Engine
+* Console output capturing and display
+* Error handling for runtime exceptions
 
-### Runtime Features
+### Supported JavaScript Concepts
 
-- Execute JavaScript from files
-- Command-line interface
-- Console output capturing
-- Error handling
-- Lightweight architecture
+* Variable declarations (`let`, `const`)
+* Primitive data types (`number`, `string`, `boolean`)
+* Arrays and Objects
+* Functions and Arrow Functions
+* Conditional Statements (`if`, `else if`, `else`)
+* Loops (`for`, `while`, `do...while`)
+* Array Methods (`map`, `filter`, `reduce`, `find`, etc.)
+* String Methods
+* Math Operations (`Math.floor`, `Math.random`, etc.)
+* Spread and Rest Operators
+* Modern ES6+ JavaScript Features
 
 ---
 
@@ -51,7 +37,8 @@ The runtime:
 js-runtime/
 │
 ├── runtime/
-│   └── interpreter.py
+│   ├── interpreter.py
+│   └── version.py
 │
 ├── tests/
 │   ├── tc1.js
@@ -59,6 +46,14 @@ js-runtime/
 │   ├── tc3.js
 │   ├── tc4.js
 │   └── tc5.js
+│
+├── examples/
+│   └── hello.js
+│
+├── assets/
+│   ├── tc1.png
+│   ├── tc3.png
+│   └── tc5.png
 │
 ├── run.py
 ├── requirements.txt
@@ -69,12 +64,37 @@ js-runtime/
 
 ---
 
+## Architecture
+
+```text
+JavaScript File
+        │
+        ▼
+      run.py
+        │
+        ▼
+     JS Runtime
+        │
+        ▼
+Google V8 Engine
+ (PyMiniRacer)
+        │
+        ▼
+ Console Output
+  Collection Layer
+        │
+        ▼
+      Terminal
+```
+
+---
+
 ## Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/<your-username>/js-runtime.git
 cd js-runtime
 ```
 
@@ -117,21 +137,29 @@ py-mini-racer==0.6.0
 
 ## Usage
 
-Run a JavaScript file:
+Run a JavaScript file using:
+
+```bash
+python run.py <javascript_file>
+```
+
+Example:
 
 ```bash
 python run.py tests/tc1.js
 ```
 
-### Example
+---
 
-#### JavaScript Input
+## Example
+
+### JavaScript Input
 
 ```javascript
 console.log("Hello World");
 ```
 
-#### Output
+### Output
 
 ```text
 Hello World
@@ -139,33 +167,11 @@ Hello World
 
 ---
 
-## Architecture
+## Sample Test Cases
 
-```text
-JavaScript File
-        │
-        ▼
-     run.py
-        │
-        ▼
-   JS Runtime
-        │
-        ▼
- Google V8 Engine
- (PyMiniRacer)
-        │
-        ▼
- Captured Output
-        │
-        ▼
-      Terminal
-```
+### TC1 – Odd / Even Checker
 
----
-
-## Included Test Cases
-
-### TC1 - Odd / Even Checker
+Input:
 
 ```javascript
 let num = 7;
@@ -177,21 +183,78 @@ if (num % 2 === 0) {
 }
 ```
 
-### TC2 - Triangle Pattern
+Output:
 
-Nested `for` loops generating a star pattern.
+```text
+7 is Odd
+```
 
-### TC3 - Armstrong Number
+---
 
-Function-based Armstrong number verification.
+### TC2 – Triangle Pattern
 
-### TC4 - Array Reverse
+Output:
 
-Array cloning and reversing using JavaScript array methods.
+```text
+*
+**
+***
+****
+*****
+```
 
-### TC5 - Palindrome Check
+---
 
-String reversal and palindrome validation.
+### TC3 – Armstrong Number
+
+Output:
+
+```text
+true
+false
+```
+
+---
+
+### TC4 – Array Reverse
+
+Output:
+
+```text
+Original: 1, 2, 3, 4, 5
+Reversed: 5, 4, 3, 2, 1
+```
+
+---
+
+### TC5 – Palindrome Check
+
+Output:
+
+```text
+racecar is a Palindrome
+```
+
+---
+
+## Design Decisions
+
+Instead of implementing a JavaScript parser and interpreter from scratch, this project embeds Google's V8 JavaScript Engine through PyMiniRacer.
+
+### Benefits
+
+* High JavaScript compatibility
+* Fast execution speed
+* Support for modern JavaScript features
+* Lightweight Python integration
+* Reliable handling of JavaScript execution
+
+The runtime focuses on:
+
+* Reading JavaScript source files
+* Executing code safely through V8
+* Capturing console output
+* Displaying results in the terminal
 
 ---
 
@@ -199,14 +262,14 @@ String reversal and palindrome validation.
 
 1. User provides a JavaScript file.
 2. `run.py` reads the file contents.
-3. The code is passed to the runtime.
-4. The runtime executes JavaScript using Google's V8 Engine.
-5. `console.log()` output is captured.
-6. Results are printed to the terminal.
+3. The JavaScript code is passed to the runtime.
+4. The runtime executes the code using the V8 Engine.
+5. Console output is captured and stored.
+6. Captured output is printed to the terminal.
 
 ---
 
-## Sample Commands
+## Running Included Test Cases
 
 ```bash
 python run.py tests/tc1.js
@@ -218,6 +281,27 @@ python run.py tests/tc5.js
 
 ---
 
+## Future Improvements
+
+* Interactive REPL Mode
+* Multiple File Execution
+* Module Support
+* Custom JavaScript APIs
+* Enhanced Error Reporting
+* Execution Statistics
+
+---
+
 ## License
 
 This project is licensed under the MIT License.
+
+See the LICENSE file for details.
+
+---
+
+## Author
+
+**Dipan Pramanik**
+
+Built as a hackathon project to demonstrate JavaScript runtime execution using Python and Google's V8 Engine.

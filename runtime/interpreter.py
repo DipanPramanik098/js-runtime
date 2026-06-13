@@ -15,6 +15,15 @@ class JSRuntime:
         var console = {{
             log: function(...args) {{
                 output.push(args.join(" "));
+            }},
+            error: function(...args) {{
+                output.push(args.join(" "));
+            }},
+            warn: function(...args) {{
+                output.push(args.join(" "));
+            }},
+            info: function(...args) {{
+                output.push(args.join(" "));
             }}
         }};
 
@@ -25,7 +34,6 @@ class JSRuntime:
 
         try:
             result = self.ctx.eval(wrapped_code)
-
             outputs = json.loads(result)
 
             for line in outputs:
