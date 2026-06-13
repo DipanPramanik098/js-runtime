@@ -10,34 +10,49 @@ class JSRuntime:
     def execute(self, code):
 
         wrapped_code = f"""
-        var output = [];
+var output = [];
 
-        var console = {{
-            log: function(...args) {{
-                output.push(args.join(" "));
-            }},
-            error: function(...args) {{
-                output.push(args.join(" "));
-            }},
-            warn: function(...args) {{
-                output.push(args.join(" "));
-            }},
-            info: function(...args) {{
-                output.push(args.join(" "));
-            }}
-        }};
+function formatArgs(args) {{
+    return args.map(arg =>
+        arg === null
+            ? "null"
+            : typeof arg === "object"
+                ? JSON.stringify(arg)
+                : String(arg)
+    ).join(" ");
+}}
 
-        {code}
+var console = {{
+    log: function(...args) {{
+        output.push(formatArgs(args));
+    }},
 
-        JSON.stringify(output);
-        """
+    error: function(...args) {{
+        output.push(formatArgs(args));
+    }},
+
+    warn: function(...args) {{
+        output.push(formatArgs(args));
+    }},
+
+    info: function(...args) {{
+        output.push(formatArgs(args));
+    }}
+}};
+
+{code}
+
+JSON.stringify(output);
+"""
 
         try:
             result = self.ctx.eval(wrapped_code)
-            outputs = json.loads(result)
 
-            for line in outputs:
-                print(line)
+            if result:
+                outputs = json.loads(result)
+
+                for line in outputs:
+                    print(line)
 
         except Exception as e:
             print(f"JavaScript Runtime Error: {e}")
